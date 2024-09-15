@@ -58,7 +58,7 @@ pipeline {
         stage('Login to Docker Registry') {
             steps {
                 script {
-                    docker.withRegistry('', "${DOCKER_USER}:${DOCKER_PASS}") {
+                    docker.withRegistry('', "${DOCKER_PASS}") {
                         echo 'Logged in to Docker Registry'
                     }
                 }
@@ -76,7 +76,7 @@ pipeline {
         stage('Push Docker Image') {
             steps {
                 script {
-                    docker.withRegistry('', "${DOCKER_USER}:${DOCKER_PASS}") {
+                    docker.withRegistry('', "${DOCKER_PASS}") {
                         docker.image("${IMAGE_NAME}:${IMAGE_TAG}").push()
                         docker.image("${IMAGE_NAME}:${IMAGE_TAG}").push('latest')
                     }
