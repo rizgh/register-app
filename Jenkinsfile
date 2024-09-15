@@ -86,12 +86,13 @@ pipeline {
                }
           }
        }
-	stage("Trigger CD Pipeline") {
-            steps {
-                script {
-                    sh "curl -v -k --user riz:${JENKINS_API_TOKEN} -X POST -H 'cache-control: no-cache' -H 'content-type: application/x-www-form-urlencoded' --data 'IMAGE_TAG=${IMAGE_TAG}' 'ec2-54-172-208-239.compute-1.amazonaws.com:8080/job/deploy-cd/buildWithParameters?token=gitops-token'"
-                }
-            }
-       }
+	stage('Save Image Tag') {
+    	    steps {
+        	script {
+            	writeFile file: 'image_tag.txt', text: "${IMAGE_TAG}"
+            	archiveArtifacts artifacts: 'image_tag.txt'
+        	}
+    	    }
+	}
     }
 }
