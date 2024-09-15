@@ -5,6 +5,7 @@ pipeline {
         maven 'maven3'
     }
         environment {
+	    DOCKER_REGISTRY = 'https://index.docker.io/v1/
 	    APP_NAME = "register-app-pipeline"
             RELEASE = "1.0.0"
             DOCKER_USER = "rizgh"
@@ -53,19 +54,30 @@ pipeline {
                 }	
             }
         }
-	stage("Build & Push Docker Image") {
+        stage('Login to Docker Registry') {
             steps {
                 script {
-                    docker.withRegistry('',DOCKER_PASS) {
-                        docker_image = docker.build "${IMAGE_NAME}"
-                    }
-
-                    docker.withRegistry('',DOCKER_PASS) {
-                        docker_image.push("${IMAGE_TAG}")
-                        docker_image.push('latest')
+                    docker.withRegistry(DOCKER_REGISTRY, "${DOCKER_USER}:${DOCKER_PASS}") {
+                        echo 'Logged in to Docker Registry'
                     }
                 }
             }
-       }
+	}
+	stage('Build Docker Image') {
+            steps {
+                script {
+                    docker.build("${IMAGE_NAME}:${IMAGE_TAG}")
+                }
+            }
+        }
+	stage('Push Docker Image') {
+            steps {
+                script {
+                    docker.withRegistry(DOCKER_REGISTRY, "${DOCKER_USER}:${DOCKER_PASS}") {
+                        docker.image("${IMAGE_NAME}:${IMAGE_TAG}").push()
+                    }
+                }
+            }
+        }
    }
 }
