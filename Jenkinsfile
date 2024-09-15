@@ -86,13 +86,13 @@ pipeline {
                }
           }
        }
-	stage('Save Image Tag') {
+	stage('Trigger Deployment Pipeline') {
     	    steps {
-        	script {
-            	writeFile file: 'image_tag.txt', text: "${IMAGE_TAG}"
-            	archiveArtifacts artifacts: 'image_tag.txt'
-        	}
-    	    }
-	}
+                  script {
+                  build job: 'deploy-cd', 
+                  parameters: [string(name: 'IMAGE_TAG', value: "${IMAGE_TAG}")]
+        }
+    }
+}
     }
 }
