@@ -5,7 +5,7 @@ pipeline {
         maven 'maven3'
     }
         environment {
-	    DOCKER_REGISTRY = 'https://index.docker.io/v1/
+	    DOCKER_REGISTRY = 'https://index.docker.io/v1/'
 	    APP_NAME = "register-app-pipeline"
             RELEASE = "1.0.0"
             DOCKER_USER = "rizgh"
