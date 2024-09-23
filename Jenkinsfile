@@ -72,7 +72,7 @@ pipeline {
 		stage("Trigger CD Pipeline") {
             		steps {
                 	script {
-                    def cdBuild = build job: 'cd-pipeline', parameters: [
+                    def cdBuild = build job: 'CD-apps', parameters: [
                         string(name: 'IMAGE_TAG', value: "${IMAGE_TAG}")
                     ]
                 }
